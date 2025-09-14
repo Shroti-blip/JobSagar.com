@@ -152,7 +152,7 @@
                          th:src="@{'/jobseeker/profile-picture'}"
                          class="profile-img rounded-circle mb-3"
                          alt="Profile Picture"
-                         id="profilePreview">
+                         id="profilePreview1">
 
                     <img th:unless="${jobSeeker.profilePicture != null}"
                          th:src="@{'https://ui-avatars.com/api/?name=' + ${jobSeeker.name.replace(' ','+')} + '&size=150&background=random'}"
