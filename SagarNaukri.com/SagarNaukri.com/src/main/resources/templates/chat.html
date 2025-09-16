@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobSagar Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        #chat-box {
+          height: 400px;
+          overflow-y: auto;
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+        .msg {
+          margin: 5px 0;
+          padding: 8px 12px;
+          border-radius: 15px;
+          display: inline-block;
+          max-width: 70%;
+          word-wrap: break-word;
+        }
+        .msg.sent {
+          background: #007bff;
+          color: white;
+          text-align: right;
+          float: right;
+          clear: both;
+        }
+        .msg.received {
+          background: #e9ecef;
+          float: left;
+          clear: both;
+        }
+    </style>
+</head>
+<body class="container py-4">
+
+<h3 class="mb-3">Chat</h3>
+
+<!-- hidden dynamic values -->
+<input type="hidden" id="conversationId" value="1">
+<input type="hidden" id="senderId" value="2"> <!-- logged-in user -->
+
+<!-- Chat box -->
+<div id="chat-box"></div>
+
+<!-- Input row -->
+<div class="input-group">
+    <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+    <button id="sendBtn" class="btn btn-primary">Send</button>
+</div>
+
+<script>
+    const socket = new WebSocket("ws://localhost:8081/chat");
+
+    const conversationId = document.getElementById("conversationId").value;
+    const senderId = document.getElementById("senderId").value;
+
+    const chatBox = document.getElementById("chat-box");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Incoming messages
+    socket.onmessage = (event) => {
+      const msgData = JSON.parse(event.data);
+
+      let div = document.createElement("div");
+      div.classList.add("msg");
+
+      // Check if the sender is me or other user
+      if (msgData.senderId == senderId) {
+        div.classList.add("sent");
+      } else {
+        div.classList.add("received");
+      }
+
+      div.textContent = msgData.content;
+      chatBox.appendChild(div);
+
+      // Auto scroll to bottom
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    // Send message function
+    function sendMessage() {
+      let content = messageInput.value.trim();
+      if (content === "") return;
+
+      socket.send(JSON.stringify({
+        conversationId: conversationId,
+        senderId: senderId,
+        content: content
+      }));
+
+      messageInput.value = "";
+    }
+
+    // Button click
+    sendBtn.onclick = sendMessage;
+
+    // Enter key
+    messageInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+</script>
+
+</body>
+</html>
