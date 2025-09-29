@@ -330,8 +330,8 @@
 
 <div class="container login-container" id="container" th:style="${register} ? 'visibility:hidden' : 'visibility:visible'">
   <div class="login-header">
-    <h2 th:if="${register}"><i class="fas fa-briefcase me-2"></i>Welcome!</h2>
-    <h2 th:unless="${register}"><i class="fas fa-briefcase me-2"></i>Welcome Back!</h2>
+    <a href="/home" class="text-decoration-none"><h2 th:if="${register}"><i class="fas fa-briefcase me-2"></i>Welcome!</h2></a>
+    <a href="/home" class="text-decoration-none"><h2 th:unless="${register}"><i class="fas fa-briefcase me-2"></i>Welcome Back!</h2></a>
     <p>Sign in to Access your company's dashboard</p>
   </div>
 
