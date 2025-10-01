@@ -1,3 +1,3 @@
 # SagarNaukri.com
 
-Java, SpringBoot, Postgresql, Thymeleaf, HTML, CSS, Bootstrap and JS;
+## Java, SpringBoot, Postgresql, Thymeleaf, HTML, CSS, Bootstrap and JS;
